@@ -1,0 +1,10 @@
+defaultNamespace: reflector-system
+helm:
+  releaseName: reflector
+  repo: https://emberstack.github.io/helm-charts
+  chart: reflector
+
+dependsOn:
+  - selector:
+      matchLabels:
+        secret: my-ca

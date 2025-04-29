@@ -1,0 +1,35 @@
+# kubectl create secret generic basic-auth-secret -n fleet-default --type=kubernetes.io/basic-auth --from-literal=username=$user --from-literal=password=$pat
+
+apiVersion: fleet.cattle.io/v1alpha1
+kind: GitRepo
+metadata:
+  name: ml-cluster
+  namespace: fleet-local
+spec:
+  # Everything from this repo will be run in this cluster. You trust me right?
+  repo: "https://github.com/Jearde/rk2-ml-cluster.git"
+  branch: main
+  clientSecretName: basic-auth-secret
+  paths:
+  - fleet
+
+---
+
+apiVersion: fleet.cattle.io/v1alpha1
+kind: GitRepo
+metadata:
+  name: ml-cluster-downstream
+  namespace: fleet-default
+spec:
+  repo: "https://github.com/Jearde/rk2-ml-cluster.git"
+  branch: main
+  clientSecretName: basic-auth-secret
+  targets:
+    - clusterSelector:
+        matchExpressions:
+          - key: provider.cattle.io
+            operator: NotIn
+            values:
+              - harvester
+  paths:
+  - fleet

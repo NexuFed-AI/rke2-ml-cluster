@@ -1,0 +1,7 @@
+namespace: cattle-system
+
+labels:
+  secret: my-ca
+
+helm:
+  takeOwnership: true

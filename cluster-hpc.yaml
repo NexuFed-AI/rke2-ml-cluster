@@ -1,0 +1,42 @@
+apiVersion: provisioning.cattle.io/v1
+kind: Cluster
+metadata:
+  annotations:
+    field.cattle.io/creatorId: system:admin
+    field.cattle.io/description: High performance cluster for machine learning.
+  name: hpc
+  namespace: fleet-default
+spec:
+  kubernetesVersion: v1.32.3+rke2r1
+  localClusterAuthEndpoint: {}
+  rkeConfig:
+    additionalManifest: ""
+    chartValues:
+      rke2-calico: {}
+    etcd:
+      snapshotRetention: 5
+      snapshotScheduleCron: 0 */5 * * *
+    machineGlobalConfig:
+      cni: calico
+      disable-kube-proxy: false
+      etcd-expose-metrics: false
+    machinePoolDefaults: {}
+    machineSelectorConfig:
+    - config:
+        protect-kernel-defaults: false
+    registries: {}
+    upgradeStrategy:
+      controlPlaneConcurrency: "1"
+      controlPlaneDrainOptions:
+        deleteEmptyDirData: true
+        enabled: true
+        gracePeriod: -1
+        ignoreDaemonSets: true
+        timeout: 120
+      workerConcurrency: "1"
+      workerDrainOptions:
+        deleteEmptyDirData: true
+        enabled: true
+        gracePeriod: -1
+        ignoreDaemonSets: true
+        timeout: 120

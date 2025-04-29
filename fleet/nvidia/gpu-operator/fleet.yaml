@@ -1,0 +1,25 @@
+# https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/latest/getting-started.html
+
+defaultNamespace: gpu-operator
+helm:
+  releaseName: gpu-operator
+  repo: https://nvidia.github.io/gpu-operator
+  chart: gpu-operator
+  version: ""
+  valuesFiles:
+    - values.yaml
+  targetCustomizations:
+  - name: local
+    clusterName: local
+    doNotDeploy: false
+    correctDrift:
+      enabled: true
+      force: true # Warning: it might recreate resources if set to true
+      keepFailHistory: false
+  - name: hpc
+    clusterName: hpc
+    doNotDeploy: false
+    correctDrift:
+      enabled: true
+      force: true # Warning: it might recreate resources if set to true
+      keepFailHistory: false

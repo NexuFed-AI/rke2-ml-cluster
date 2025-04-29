@@ -1,0 +1,7 @@
+namespace: cattle-system
+
+labels:
+  secret: harbor-regcred
+
+helm:
+  takeOwnership: true
