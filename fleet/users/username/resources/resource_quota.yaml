@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: compute-resources
+  namespace: <username> # Name of the user namespace -> kubectl get namespaces
+spec:
+  hard:
+    pods: "10"
+    # Minimum resources required
+    # requests.cpu: "24"
+    # requests.memory: 32Gi
+    # Maximum resources allowed
+    # limits.cpu: "44"  
+    # limits.memory: 60Gi
+    limits.nvidia.com/gpu: "3"

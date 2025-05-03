@@ -1,0 +1,18 @@
+defaultNamespace: cattle-monitoring-system
+
+labels:
+  app: rancher-monitoring-crd
+
+helm:
+  releaseName: rancher-monitoring-crd
+  chart: rancher-monitoring-crd
+  repo: https://charts.rancher.io
+  version: 105.1.0+up61.3.2
+
+targetCustomizations:
+  - name: local
+    clusterName: local
+    doNotDeploy: false
+  - name: hpc
+    clusterName: hpc
+    doNotDeploy: false

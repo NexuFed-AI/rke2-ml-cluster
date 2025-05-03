@@ -1,0 +1,14 @@
+helm:
+  takeOwnership: true
+
+targetCustomizations:
+  - name: local
+    clusterName: local
+    yaml:
+      overlays:
+        - local
+  - name: hpc
+    clusterName: hpc
+    yaml:
+      overlays:
+        - hpc

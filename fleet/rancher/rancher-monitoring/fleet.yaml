@@ -1,0 +1,53 @@
+# https://github.com/rancher/charts/blob/dev-v2.9/charts/rancher-monitoring/104.0.0-rc1%2Bup45.31.1/values.yaml
+
+defaultNamespace: cattle-monitoring-system
+
+labels:
+  app: rancher-monitoring
+
+paused: false
+
+helm:
+  releaseName: rancher-monitoring
+  repo: https://charts.rancher.io
+  chart: rancher-monitoring
+  version: 105.1.0+up61.3.2
+  valuesFiles:
+    - values.yaml
+    
+
+diff:
+  comparePatches:
+    - apiVersion: admissionregistration.k8s.io/v1
+      kind: MutatingWebhookConfiguration
+      name: rancher-monitoring-admission
+      operations:
+        - {"op":"remove", "path":"/webhooks/0/failurePolicy"}
+    - apiVersion: admissionregistration.k8s.io/v1
+      kind: ValidatingWebhookConfiguration
+      name: rancher-monitoring-admission
+      operations:
+        - {"op":"remove", "path":"/webhooks/0/failurePolicy"}
+
+dependsOn:
+  - selector:
+      matchLabels:
+        app: rancher-monitoring-crd
+
+targetCustomizations:
+  - name: local
+    clusterName: local
+    doNotDeploy: false
+  - name: hpc
+    clusterName: hpc
+    doNotDeploy: false
+    takeOwnership: true
+    helm:
+      values:
+        grafana:
+          grafana.ini:
+            server:
+              domain: "ml-cluster-hpc.domain.de"
+          ingress:
+            hosts:
+              - ml-cluster-hpc.domain.de

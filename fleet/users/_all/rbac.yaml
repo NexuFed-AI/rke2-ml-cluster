@@ -1,0 +1,24 @@
+apiVersion: management.cattle.io/v3
+kind: RoleTemplate
+metadata:
+  name: developer-role-template
+context: project # Use "project" for namespace-scoped permissions
+rules:
+- apiGroups: ["", "extensions", "apps"]
+  resources: ["deployments", "pods", "services", "secrets", "configmaps"]
+  verbs: ["get", "watch", "list", "create", "update", "delete", "patch"]
+- apiGroups: ["batch"]
+  resources: ["jobs", "cronjobs"]
+  verbs: ["get", "watch", "list", "create", "update", "delete", "patch"]
+- apiGroups: [""]
+  resources: ["pods/log", "pods/exec", "events", "pods/portforward", "pods/attach"]
+  verbs: ["get", "watch", "list", "create"]
+- apiGroups: [""]
+  resources: ["persistentvolumeclaims", "persistentvolumes", "namespaces"]
+  verbs: ["get", "watch", "list"]
+- apiGroups: ["kubeflow.org"]
+  resources: ["pytorchjobs", "tfjobs", "experiments", "notebooks"]
+  verbs: ["get", "watch", "list", "create", "update", "delete", "patch"]
+- apiGroups: ["apiextensions.k8s.io"]
+  resources: ["customresourcedefinitions"]
+  verbs: ["get", "watch", "list"]

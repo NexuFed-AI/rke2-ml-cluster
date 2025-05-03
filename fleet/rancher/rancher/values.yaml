@@ -1,0 +1,7 @@
+bootstrapPassword: password
+hostname: ml-cluster.domain.de
+replicas: 2
+ingress:
+  tls:
+    source: secret
+privateCA: true

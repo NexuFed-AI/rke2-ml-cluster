@@ -1,0 +1,18 @@
+helm:
+  takeOwnership: true
+
+targetCustomizations:
+  - name: local
+    clusterName: local
+    yaml:
+      overlays:
+        - local
+  - name: hpc
+    clusterName: c-m-kcmfgsh7
+    yaml:
+      overlays:
+        - hpc
+    correctDrift:
+      enabled: true
+      force: true # Warning: it might recreate resources if set to true
+      keepFailHistory: false

@@ -1,0 +1,29 @@
+defaultNamespace: nfs-provisioner
+
+labels:
+  storage: nfs
+
+helm:
+  releaseName: nfs-subdir-external-provisioner
+  repo: https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner
+  chart: nfs-subdir-external-provisioner
+  force: false
+  valuesFiles:
+    - values.yaml
+
+paused: false
+
+targetCustomizations:
+  - name: local
+    clusterName: local
+    doNotDeploy: false
+  - name: hpc
+    clusterName: hpc
+    doNotDeploy: false
+    helm:
+      values:
+        nfs:
+          server: 10.0.0.10
+          path: /exports/k8s/k8s_hpc
+
+  

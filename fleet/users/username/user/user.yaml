@@ -1,0 +1,10 @@
+apiVersion: management.cattle.io/v3
+description: ''
+displayName: René Glitza
+enabled: true
+kind: User
+metadata:
+  name: <username>
+spec: {}
+username: <username>
+password: $2a$10$llfgsKsGV2el2f1C/YcoGe6IVhJGMWcjd0zBCdOh0jp4u8mcO8ngK # awesome -> Bcrypt hash with 10 rounds

@@ -1,0 +1,3 @@
+metadata:
+  annotations:
+    field.cattle.io/projectId: local:<username>-project-local

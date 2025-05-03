@@ -1,0 +1,23 @@
+defaultNamespace: harbor-system
+helm:
+  releaseName: harbor
+  repo: https://helm.goharbor.io
+  chart: harbor
+  valuesFiles:
+    - values.yaml
+
+dependsOn:
+  - selector:
+      matchLabels:
+        storage: nfs
+  - selector:
+      matchLabels:
+        secret: rub
+
+targetCustomizations:
+- name: hpc
+  clusterName: hpc
+  # clusterGroupSelector:
+  #     matchLabels:
+  #       env: local
+  doNotDeploy: true

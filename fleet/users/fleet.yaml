@@ -1,0 +1,5 @@
+labels:
+  role: users
+
+helm:
+  takeOwnership: true

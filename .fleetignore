@@ -1,4 +1,6 @@
 fleet-repo.yaml
+repositories
+clusters
 scripts
 docs
 .k8s

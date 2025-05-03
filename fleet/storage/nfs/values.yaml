@@ -1,0 +1,16 @@
+# https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner/blob/master/charts/nfs-subdir-external-provisioner/README.md
+replicaCount: 1
+storageClass:
+  name: nfs-client
+  defaultClass: true
+  onDelete: true
+nfs:
+  server: 10.0.0.10
+  path: /exports/k8s/k8s_dev
+  mountOptions:
+  - defaults # Use default mount options
+  - nfsvers=4.2 # NFS version
+  - nodiratime # Do not update directory access time
+  - noatime # Do not update file access time
+  - async # Asynchronous writes
+  - fsc # Use a cache to speed up file access

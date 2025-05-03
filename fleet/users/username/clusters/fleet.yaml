@@ -1,0 +1,11 @@
+helm:
+  takeOwnership: true
+
+targetCustomizations:
+  - name: local
+    clusterName: local
+    doNotDeploy: false
+  
+  - name: hpc
+    clusterName: hpc
+    doNotDeploy: true

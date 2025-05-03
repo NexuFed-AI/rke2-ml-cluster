@@ -1,0 +1,23 @@
+replicas: 2
+externalURL: https://harbor.domain.de
+harborAdminPassword: password
+
+expose:
+  type: ingress
+  ingress:
+    hosts:
+      core: harbor.domain.de
+      notary: ml-cluster.domain.de/notary
+  tls:
+    enabled: true
+    # certSource: auto
+    certSource: secret
+    secret:
+      secretName: tls-rancher-ingress
+
+persistence:
+  enabled: true
+  storageClass: nfs-client
+  persistentVolumeClaim:
+    registry:
+      size: 100Gi

@@ -1,0 +1,55 @@
+defaultNamespace: longhorn-system
+helm:
+  releaseName: longhorn
+  repo: https://charts.longhorn.io
+  chart: longhorn
+  values:
+    replicas: 2
+    persistence:
+      defaultClass: false
+
+diff:
+  comparePatches:
+  - apiVersion: apiextensions.k8s.io/v1
+    kind: CustomResourceDefinition
+    name: engineimages.longhorn.io
+    operations:
+    - {"op": "replace", "path": "/status"}
+  - apiVersion: apiextensions.k8s.io/v1
+    kind: CustomResourceDefinition
+    name: nodes.longhorn.io
+    operations:
+    - {"op": "replace", "path": "/status"}
+  - apiVersion: apiextensions.k8s.io/v1
+    kind: CustomResourceDefinition
+    name: volumes.longhorn.io
+    operations:
+    - {"op": "replace", "path": "/status"}
+  - apiVersion: apiextensions.k8s.io/v1
+    kind: CustomResourceDefinition
+    name: engines.longhorn.io
+    operations:
+    - {"op": "replace", "path": "/status"}
+  - apiVersion: apiextensions.k8s.io/v1
+    kind: CustomResourceDefinition
+    name: instancemanagers.longhorn.io
+    operations:
+    - {"op": "replace", "path": "/status"}
+  - apiVersion: apiextensions.k8s.io/v1
+    kind: CustomResourceDefinition
+    name: replicas.longhorn.io
+    operations:
+    - {"op": "replace", "path": "/status"}
+  - apiVersion: apiextensions.k8s.io/v1
+    kind: CustomResourceDefinition
+    name: settings.longhorn.io
+    operations:
+    - {"op": "replace", "path": "/status"}
+
+targetCustomizations:
+  - name: local
+    clusterName: local
+    doNotDeploy: true
+  - name: hpc
+    clusterName: hpc
+    doNotDeploy: true

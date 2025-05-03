@@ -1,0 +1,15 @@
+defaultNamespace: cattle-system
+helm:
+  releaseName: rancher
+  repo: https://releases.rancher.com/server-charts/latest
+  chart: rancher
+  valuesFiles:
+    - values.yaml
+
+targetCustomizations:
+- name: hpc
+  clusterName: hpc
+  # clusterGroupSelector:
+  #     matchLabels:
+  #       env: local
+  doNotDeploy: true

@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-<username>
+spec:
+  capacity:
+    storage: 1Mi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    server: 10.0.0.10
+    path: "/exports/shared/users/<username>"
+  mountOptions:
+    - nfsvers=4.2 # NFS version
+    - async # Asynchronous writes
+    - nodiratime # Do not update directory access time
+    - noatime # Do not update file access time
+    - fsc # Use a cache to speed up file access
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs
+  namespace: <username>
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 1Mi
+  volumeName: nfs-<username>

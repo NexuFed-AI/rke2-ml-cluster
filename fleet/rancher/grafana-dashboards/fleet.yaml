@@ -1,0 +1,6 @@
+defaultNamespace: cattle-dashboards
+
+dependsOn:
+  - selector:
+      matchLabels:
+        app: rancher-monitoring

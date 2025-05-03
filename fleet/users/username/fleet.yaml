@@ -1,0 +1,6 @@
+defaultNamespace: <username>
+
+helm:
+  takeOwnership: true
+
+namespace: <username>

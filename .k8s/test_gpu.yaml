@@ -1,0 +1,70 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: gpu-job
+  namespace: <username>
+spec:
+  ttlSecondsAfterFinished: 100
+  template:
+    spec:
+      restartPolicy: Never
+      runtimeClassName: nvidia
+
+      imagePullSecrets:
+      - name: regcred
+
+      volumes:
+      - name: nfs
+        persistentVolumeClaim:
+          claimName: nfs
+      - name: shared-mem
+        emptyDir:
+          sizeLimit: 4Gi # 2 GB are usually sufficient, use more if need be
+          medium: Memory     
+
+      containers:
+      - name: gpu-container
+        image: nvidia/cuda:12.0.0-base-ubuntu22.04
+        imagePullPolicy: IfNotPresent
+
+        env:
+        - name: OMP_NUM_THREADS  # Can be tuned for optimal performance
+          value: "1"
+
+        # envFrom:
+        # - configMapRef:
+        #     name: env-config
+        
+        resources:
+          limits:
+            nvidia.com/gpu: "1" # Request 1 GPU
+
+        command: ["/bin/bash", "-c"]
+        args: 
+        - |
+          apt-get -qq update && apt-get -qq install -y fio > /dev/null;
+          echo "=========================";
+          echo "/mnt/nfs";
+          ls -la /mnt/nfs;
+          echo "=========================";
+          nvidia-smi;
+          nvidia-smi -L;
+          echo "=========================";
+          echo "NFS perfomance testing"
+          raid_path="/mnt/nfs/raidtest";
+          mkdir -p $raid_path;
+          fio  --rw=randread --bs=4M --numjobs=1 --iodepth=1 --runtime=30  --time_based  --loops=1 --ioengine=libaio --direct=0  --invalidate=1  --fsync_on_close=1  --randrepeat=1  --norandommap --exitall --filesize=1G --group_reporting --refill_buffers --name raidtest --directory=$raid_path --nrfiles=16fio --rw=randread --bs=4M --numjobs=1 --iodepth=1 --runtime=30  --time_based  --loops=1 --ioengine=libaio --direct=0  --invalidate=1  --fsync_on_close=1  --randrepeat=1  --norandommap --exitall --filesize=1G --group_reporting --refill_buffers --name raidtest --directory=$raid_path --nrfiles=16 --eta=never | grep READ:;
+          rm -rf $raid_path;
+          echo "=========================";
+
+        # command: ["/bin/bash", "-c"]
+        # args: 
+        # - |
+        #   tail -f /dev/null;
+        
+        volumeMounts:
+          - name: shared-mem
+            mountPath: /dev/shm
+          - name: nfs
+            mountPath: /mnt/nfs
+            # subPathExpr: $(USER_FOLDER)

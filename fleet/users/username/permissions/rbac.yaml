@@ -1,0 +1,41 @@
+apiVersion: management.cattle.io/v3
+kind: Project
+metadata:
+  name: <username>-project-local-2 # Unique name for the project
+  namespace: local # This must match the cluster name
+spec:
+  displayName: <username>-project-local-2
+  clusterName: local # The cluster this project belongs to
+
+---
+
+apiVersion: management.cattle.io/v3
+kind: ProjectRoleTemplateBinding
+metadata:
+  name: developer-role-binding-<username>-local
+  namespace: <username>-project-local-2 # The namespace where this role applies
+roleTemplateName: developer-role-template
+projectName: local:<username>-project-local-2
+userName: <username> # The user who gets the role
+
+---
+
+apiVersion: management.cattle.io/v3
+kind: Project
+metadata:
+  name: <username>-project-hpc-2 # Unique name for the project
+  namespace: c-m-kcmfgsh7 # This must match the cluster name
+spec:
+  displayName: <username>-project-hpc-2
+  clusterName: c-m-kcmfgsh7 # The cluster this project belongs to
+
+---
+
+apiVersion: management.cattle.io/v3
+kind: ProjectRoleTemplateBinding
+metadata:
+  name: developer-role-binding-<username>-hpc
+  namespace: <username>-project-hpc-2 # The namespace where this role applies
+roleTemplateName: developer-role-template
+projectName: c-m-kcmfgsh7:<username>-project-hpc-2
+userName: <username> # The user who gets the role

@@ -1,0 +1,22 @@
+# kubectl get clusters.management.cattle.io
+
+apiVersion: management.cattle.io/v3
+kind: ClusterRoleTemplateBinding
+metadata:
+  name: cluster-member-binding-<username>
+  namespace: local
+roleTemplateName: company-member # Name of the ClusterRoleTemplate to bind
+clusterName: local # Name of the cluster to bind to
+userName: <username> # Bind to a specific user
+
+---
+
+# hpc cluster
+apiVersion: management.cattle.io/v3
+kind: ClusterRoleTemplateBinding
+metadata:
+  name: cluster-member-binding-<username>
+  namespace: c-m-kcmfgsh7
+roleTemplateName: company-member # Name of the ClusterRoleTemplate to bind
+clusterName: c-m-kcmfgsh7 # Name of the cluster to bind to
+userName: <username> # Bind to a specific user
