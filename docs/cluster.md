@@ -78,7 +78,7 @@ export CONTROL_IP=$(hostname -I | cut -d' ' -f1) # IP of the node (check, if thi
 export HOST_IP=$(hostname -I | cut -d' ' -f1) # This is currently not used. It is necessary, if the node has an external IP.
 export CONTROL_DNS="ml-cluster.local" # This is the DNS name of the master. It is used for accessing the Rancher UI. (Current Admin for creating a DNS is: Anil)
 export KUBECTL_FILE="/root/.kube/config" # This is the location of the kubeconfig file. It is used for accessing the cluster using `kubectl`
-export USERNAME=${USERNAME:-"admin"} # Specify the admin user, if different than ika-admin
+export USERNAME=${USERNAME:-"admin"} # Specify the admin user, if different than admin
 export NODE_CONFIG_FILE="/home/$USERNAME/.kube/node_config.yaml" # This is the location of the node_config.yaml file. It is used for joining the cluster.
 export VIP=${VIP:-"192.168.0.100"} # Virtual IP of the cluster. It is used for accessing the cluster using `kubectl` and for accessing the Rancher UI.
 

@@ -1,4 +1,7 @@
 # Setup NFS
+This tutorial describes how to setup a fast NVME SSD NFS server with RDMA support on Debian 11. The server is used to store the data for the Kubernetes cluster. The server is connected to the cluster via RDMA and NFSv4.2.
+
+When considering other storage solutions, such as NVIDIA AIStore, this perfomance guide might be worth a look: [NVIDIA AI Storage Performance](https://aiatscale.org/docs/performance).
 
 ## Install Debian
 - Create a bootable USB stick with [Debian Live](https://cdimage.debian.org/debian-cd/current-live/amd64/iso-hybrid/) or [Debian](https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/) using [Rufus](https://rufus.ie/).
@@ -118,6 +121,7 @@ sudo tune2fs -l /dev/nvme-raid/raid | grep "RAID stride"
 sudo tune2fs -l /dev/nvme-raid/raid | grep "RAID stripe width"
 
 # Create Filesystem
+# You might also consider XFS instead of ext4
 sudo mkfs.ext4 -F /dev/nvme-raid/raid
 # sudo mkfs.ext4 -b 4096 -E stride=128,stripe-width=640 -F /dev/md0
 
