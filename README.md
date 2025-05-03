@@ -35,11 +35,11 @@ Other resources inside the cluster are:
 - Deployments: Used to deploy pods (e.g. for development)
 
 ## Contents
-1. [Setting up NFS Server](./docs/nfs.md)
+1. [Setting up NVME NFS Server](./docs/nfs.md)
 1. [Setting up RKE2 on Premise](./docs/cluster.md)
 1. [Deploy services](./docs/fleet.md)
 1. [Creating a new User](./docs/user.md)
-1. [Using the Cluster](./docs/getting_started.md)
+1. [Create Downstream Cluster](./docs/downsteam_cluster.md)
 
 # Using the Cluster
 
@@ -65,4 +65,8 @@ Other resources inside the cluster are:
 4. Set your user namespace to use:
     ```bash
     kubectl config set-context local --namespace=<username>
+    ```
+5. Run the GPU test job and check the logs. It will also mount the NFS share.
+    ```bash
+    kubectl apply -f .k8s/test_gpu.yaml
     ```
