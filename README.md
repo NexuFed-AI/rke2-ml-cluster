@@ -70,3 +70,11 @@ Other resources inside the cluster are:
     ```bash
     kubectl apply -f .k8s/test_gpu.yaml
     ```
+
+## TODOs
+- [ ] Add MinIO Operator and Tenant Manifest
+- [ ] Add AIStore Manifest
+- [ ] Add Labelstudio Manifest
+- [ ] Add Kubeflow Manifest
+- [ ] Add ArgoCD Manifest
+- [ ] Add ClearML Manifest
