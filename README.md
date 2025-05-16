@@ -1,6 +1,8 @@
 # RKE2 Cluster with Rancher and Fleet
 This is a guide on how to setup a Kubernetes cluster with RKE2 and Rancher.
-It is specifically designed for the use in the Machine Learning Cluster of the Ruhr-University Bochum.
+It is specifically designed for the use in a Machine Learning Cluster.
+
+Slides of the [PDSC3K 2025](https://skunkforce.org/pdsc3k) Talk can be found here: [Open Source MLOps with On-Premise Kubernetes](https://docs.google.com/presentation/d/19356c8yvfl3PlSNKZVaAF0tdfv31suYQhKf5CtqPyCg/edit?usp=sharing)
 
 RKE2 is a lightweight Kubernetes distribution that is easy to setup and maintain. It is a fully conformant Kubernetes distribution.
 It inherits the usability and ease-of-operations and deployment model of K3s, while still maintaining full Kubernetes API compatibility.
