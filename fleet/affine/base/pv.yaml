@@ -1,0 +1,48 @@
+# kubectl create secret generic smbcreds -n affine --from-literal username=server-backup --from-literal password="password"
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  annotations:
+    pv.kubernetes.io/provisioned-by: smb.csi.k8s.io
+  name: pv-smb-backup
+spec:
+  capacity:
+    storage: 100Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: smb
+  mountOptions:
+    - dir_mode=0777
+    - file_mode=0777
+    - uid=1000
+    - gid=1000
+    - noperm
+    - mfsymlinks
+    - cache=strict
+    - noserverino  # required to prevent data corruption
+  csi:
+    driver: smb.csi.k8s.io
+    # volumeHandle format: {smb-server-address}/{smb-server-folder}#{sub-dir-name}#{share-name}
+    # make sure this value is unique for every share in the cluster
+    volumeHandle: {smb-server-address}/{smb-server-folder}##
+    volumeAttributes:
+      source: //{smb-server-address}/{smb-server-folder}
+      subDir: user/server-backup
+    nodeStageSecretRef:
+      name: smbcreds
+      namespace: affine
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc-smb-backup
+  namespace: affine
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: smb

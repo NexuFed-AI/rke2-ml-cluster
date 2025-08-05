@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: affine
+  namespace: affine
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: affine
+  template:
+    metadata:
+      labels:
+        app: affine
+    spec:
+      containers:
+        - name: affine
+          image: ghcr.io/toeverything/affine:stable
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3010
+          env:
+            - name: REDIS_SERVER_HOST
+              value: "redis"
+            - name: DATABASE_URL
+              value: "postgresql://affine:@postgres:5432/affine"
+            - name: AFFINE_REVISION
+              value: "stable"
+            - name: AFFINE_INDEXER_ENABLED
+              value: "false"
+            - name: AFFINE_SERVER_HTTPS
+              value: "false"
+            - name: AFFINE_SERVER_HOST
+              value: "affine.domain.de"
+            - name: AFFINE_SERVER_EXTERNAL_URL
+              value: "https://affine.domain.de"
+            - name: PORT
+              value: "3010"
+            - name: AFFINE_ADMIN_EMAIL
+              value: "user@domain.de"
+            - name: AFFINE_ADMIN_PASSWORD
+              value: "password"
+            # - name: OPENAI_API_KEY
+            #   value: "ollama"
+            # - name: OPENAI_BASE_URL
+            #   value: "http://ollama.ollama.svc.cluster.local:11434"
+            # - name: OPENAI_MODEL
+            #   value: "llama3.1:latest"
+            # - name: MAILER_HOST
+            #   value: "smtp.gmail.com"
+            # - name: MAILER_PORT
+            #   value: "465"
+            # - name: MAILER_USER
+            #   value: "Your-own-gmail-address"
+            # - name: MAILER_PASSWORD
+            #   value: "Your-own-app-password"
+          volumeMounts:
+            - name: upload
+              mountPath: /root/.affine/storage
+            - name: config
+              mountPath: /root/.affine/config
+        # affine-migration moved to a Job
+        - name: redis
+          image: redis
+          ports:
+            - containerPort: 6379
+          livenessProbe:
+            exec:
+              command:
+                - redis-cli
+                - ping
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            exec:
+              command:
+                - redis-cli
+                - ping
+            initialDelaySeconds: 10
+            periodSeconds: 10
+        - name: postgres
+          image: pgvector/pgvector:pg16
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              value: "affine"
+            - name: POSTGRES_PASSWORD
+              value: ""
+            - name: POSTGRES_DB
+              value: "affine"
+            - name: POSTGRES_INITDB_ARGS
+              value: "--data-checksums"
+            - name: POSTGRES_HOST_AUTH_METHOD
+              value: "trust"
+          volumeMounts:
+            - name: db-data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: upload
+          persistentVolumeClaim:
+            claimName: affine-upload
+        - name: config
+          persistentVolumeClaim:
+            claimName: affine-config
+        - name: db-data
+          persistentVolumeClaim:
+            claimName: affine-db-data

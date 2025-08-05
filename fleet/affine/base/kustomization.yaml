@@ -1,0 +1,9 @@
+resources:
+  - namespace.yaml
+  - pvc.yaml
+  - migration-job.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+  - cronjob.yaml
+  - pv.yaml

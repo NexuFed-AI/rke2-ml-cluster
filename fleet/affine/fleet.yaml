@@ -1,0 +1,9 @@
+# Docs: https://docs.affine.pro/self-host-affine
+
+defaultNamespace: affine
+
+kustomize:
+  dir: ""
+
+helm:
+  takeOwnership: true
