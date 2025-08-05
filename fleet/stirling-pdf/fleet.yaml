@@ -1,0 +1,12 @@
+defaultNamespace: stirling-pdf
+
+labels:
+  secret: stirling-pdf
+
+helm:
+  releaseName: stirling-pdf-chart
+  repo: https://stirling-tools.github.io/Stirling-PDF-chart
+  chart: stirling-pdf-chart
+  valuesFiles:
+    - values.yaml
+  takeOwnership: true
