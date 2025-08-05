@@ -10,7 +10,7 @@ envs:
 - name: ALLOW_GOOGLE_VISIBILITY
   value: "false"
 - name: APP_LOCALE
-  value: "de_DE "
+  value: "de_DE"
   
 ingress:
   enabled: true
