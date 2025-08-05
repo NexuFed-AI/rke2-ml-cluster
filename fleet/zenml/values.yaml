@@ -1,0 +1,15 @@
+# https://github.com/zenml-io/zenml/blob/main/helm/values.yaml
+zenml:
+  serverURL: https://zenml.domain.de
+  # dashboardURL: https://zenml.domain.de/dashboard
+  
+  ingress:
+    enabled: true
+    className: "nginx"
+    annotations:
+      nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    host: zenml.domain.de
+    path: /
+    tls:
+      enabled: true
+      secretName: tls-rancher-ingress
