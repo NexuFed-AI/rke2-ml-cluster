@@ -1,0 +1,11 @@
+defaultNamespace: zenml
+
+labels:
+  secret: zenml
+
+helm:
+  releaseName: zenml-server
+  chart: oci://public.ecr.aws/zenml/zenml
+  valuesFiles:
+    - values.yaml
+  takeOwnership: true
