@@ -1,0 +1,91 @@
+# kubectl create job --from=cronjob/pgvector16-backup pgvector16-backup -n affine
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: pgvector16-backup
+  namespace: affine
+spec:
+  schedule: "* 3 * * 4" # Every Thursday at 3 AM
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          volumes:
+            - name: backup-storage
+              persistentVolumeClaim:
+                # claimName: nfs-dgx-external
+                claimName: pvc-smb-backup
+            # - name: pgpass-volume
+            #   secret:
+            #     secretName: pgpass-secret
+            #     defaultMode: 384
+            - name: upload
+              persistentVolumeClaim:
+                claimName: affine-upload
+            - name: config
+              persistentVolumeClaim:
+                claimName: affine-config
+
+          containers:
+            - name: pgvector-backup
+              image: pgvector/pgvector:pg16
+              
+              command: ["/bin/bash", "-c"]
+              args: 
+              - |
+                echo "Starting pgvector backup at $(date)";
+                DATETIME=$(date '+%Y-%m-%d-%H-%M');
+                BACKUP_FOLDER=${BACKUP_FOLDER}/affine_backup-${DATETIME};
+                mkdir -p ${BACKUP_FOLDER};
+                pg_dump \
+                  -U affine \
+                  --no-password \
+                  -h postgres.affine.svc.cluster.local \
+                  -p 5432 \
+                  -d affine | gzip > ${BACKUP_FOLDER}/pgvector16-${DATETIME}sql.gz 2> ${BACKUP_FOLDER}/backup_error.log;
+                echo "Backing up blob storage at $(date)";
+                mkdir -p ${BACKUP_FOLDER}/storage;
+                cp -r /mnt/storage/* ${BACKUP_FOLDER}/storage/ 2>> ${BACKUP_FOLDER}/backup_error.log;
+                echo "Backing up config at $(date)";
+                mkdir -p ${BACKUP_FOLDER}/config;
+                cp -r /mnt/config/* ${BACKUP_FOLDER}/config/ 2>> ${BACKUP_FOLDER}/backup_error.log;                
+                echo "Backup completed at $(date)";
+                ls -lh $(dirname ${BACKUP_FOLDER});
+                ls -lh ${BACKUP_FOLDER};
+                # Check for errors
+                if [ -s ${BACKUP_FOLDER}/backup_error.log ]; then
+                  echo "Errors occurred during backup.";
+                  echo "Error log:";
+                  cat ${BACKUP_FOLDER}/backup_error.log
+                else
+                  echo "Backup completed successfully without errors!";
+                  echo "Cleaning up old backups...";
+                  echo $(find $(dirname ${BACKUP_FOLDER}) -mindepth 1 -maxdepth 1 ! -name "$(basename ${BACKUP_FOLDER})");
+                  find $(dirname ${BACKUP_FOLDER}) -mindepth 1 -maxdepth 1 ! -name "$(basename ${BACKUP_FOLDER})" -type d -exec rm -rf {} +
+                fi
+                echo "Backup process finished at $(date)";
+              env:
+                - name: BACKUP_FOLDER
+                  value: "/mnt/backup/affine"
+                # - name: PGPASSFILE
+                #   value: /.pgpass
+              
+              resources:
+                requests:
+                  cpu: 500m
+                  memory: 1Gi
+              
+              volumeMounts:
+                - name: backup-storage
+                  subPathExpr: backup
+                  mountPath: /mnt/backup
+                # - name: pgpass-volume
+                #   mountPath: /.pgpass
+                #   subPath: .pgpass
+                - name: upload
+                  mountPath: /mnt/storage
+                - name: config
+                  mountPath: /mnt/config
+
+          restartPolicy: OnFailure
