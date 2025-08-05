@@ -1,0 +1,24 @@
+# https://github.com/Stirling-Tools/Stirling-PDF-chart/blob/main/charts/stirling-pdf/values.yaml
+
+envs:
+- name: UI_APP_NAME
+  value: "Stirling PDF"
+- name: UI_HOME_DESCRIPTION
+  value: "Your locally hosted one-stop-shop for all your PDF needs."
+- name: UI_APP_NAVBAR_NAME
+  value: "Stirling PDF"
+- name: ALLOW_GOOGLE_VISIBILITY
+  value: "false"
+- name: APP_LOCALE
+  value: "de_DE "
+  
+ingress:
+  enabled: true
+  hosts:
+  - name: pdf.domain.de
+    path: /
+    tls: true
+    tlsSecret: tls-rancher-ingress
+  annotations:
+      # nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      nginx.ingress.kubernetes.io/proxy-body-size: "0"  # ← unlimited file size
