@@ -2,7 +2,7 @@
 zenml:
   serverURL: https://zenml.domain.de
   # dashboardURL: https://zenml.domain.de/dashboard
-  
+
   ingress:
     enabled: true
     className: "nginx"
